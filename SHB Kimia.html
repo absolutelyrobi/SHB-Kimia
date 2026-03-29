@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stoikiometri — Kimia Kelas 10</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — Science Lab × Editorial
+═══════════════════════════════════════════ */
+:root {
+  --bg:      #070b14;
+  --bg2:     #0c1220;
+  --bg3:     #111827;
+  --card:    #131c2e;
+  --glass:   rgba(255,255,255,.04);
+  --border:  rgba(255,255,255,.08);
+  --border2: rgba(255,255,255,.14);
+
+  --cyan:    #00e5ff;
+  --lime:    #b8ff57;
+  --amber:   #ffb347;
+  --rose:    #ff6b8a;
+  --violet:  #c084fc;
+  --teal:    #2dd4bf;
+
+  --text:    #e2e8f0;
+  --muted:   #64748b;
+  --dimmed:  #94a3b8;
+
+  --r: 12px;
+  --r2: 20px;
+  --glow-cyan: 0 0 40px rgba(0,229,255,.15);
+  --glow-lime: 0 0 40px rgba(184,255,87,.12);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ─── ANIMATED BACKGROUND ─── */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridDrift 20s linear infinite;
+  pointer-events: none;
+}
+@keyframes gridDrift { from{background-position:0 0} to{background-position:60px 60px} }
+
+.bg-orb1, .bg-orb2, .bg-orb3 {
+  position: fixed; border-radius: 50%; filter: blur(80px);
+  pointer-events: none; z-index: 0;
+}
+.bg-orb1 { width:500px;height:500px; background:radial-gradient(circle,rgba(0,229,255,.07),transparent 70%); top:-100px; left:-100px; animation:orbFloat1 15s ease-in-out infinite; }
+.bg-orb2 { width:400px;height:400px; background:radial-gradient(circle,rgba(184,255,87,.05),transparent 70%); bottom:0; right:-50px; animation:orbFloat2 18s ease-in-out infinite; }
+.bg-orb3 { width:300px;height:300px; background:radial-gradient(circle,rgba(192,132,252,.06),transparent 70%); top:50%; left:50%; animation:orbFloat3 12s ease-in-out infinite; }
+@keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,40px)} }
+@keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-60px)} }
+@keyframes orbFloat3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.3)} }
+
+/* ─── PARTICLES ─── */
+.particles { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.particle {
+  position:absolute; width:2px; height:2px;
+  border-radius:50%; background:var(--cyan);
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  from { transform:translateY(100vh) scale(0); opacity:0; }
+  10%  { opacity:.7; }
+  90%  { opacity:.3; }
+  to   { transform:translateY(-10vh) scale(1); opacity:0; }
+}
+
+/* ─── HERO ─── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+  overflow: hidden;
+}
+.hero::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:200px;
+  background: linear-gradient(transparent, var(--bg));
+  pointer-events:none;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,229,255,.08);
+  border: 1px solid rgba(0,229,255,.25);
+  color: var(--cyan);
+  font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  padding: 8px 20px; border-radius: 50px; margin-bottom: 40px;
+  animation: fadeSlideDown .8s ease both;
+}
+.hero-badge::before { content:'⚗'; font-size:14px; }
+
+.hero-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  animation: fadeSlideDown .8s .15s ease both;
+}
+.hero-headline .line1 { display:block; color: var(--text); }
+.hero-headline .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--lime) 50%, var(--teal) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradShift 4s ease infinite, fadeSlideDown .8s .15s ease both;
+}
+@keyframes gradShift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+
+.hero-sub {
+  color: var(--muted); font-size: 1rem; max-width: 520px; margin: 0 auto 48px;
+  animation: fadeSlideDown .8s .3s ease both;
+}
+
+.hero-chapters {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  animation: fadeSlideDown .8s .45s ease both;
+}
+.chap-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--glass);
+  border: 1px solid var(--border2);
+  color: var(--dimmed); font-size: 13px; font-weight: 500;
+  padding: 10px 18px; border-radius: 50px;
+  cursor: pointer; transition: all .3s; text-decoration: none;
+}
+.chap-pill:hover { background:rgba(0,229,255,.08); border-color:rgba(0,229,255,.4); color:var(--cyan); transform:translateY(-2px); }
+.chap-pill .num { background:var(--cyan); color:var(--bg); font-weight:700; font-size:11px; width:20px;height:20px; border-radius:50%; display:flex;align-items:center;justify-content:center; }
+
+/* ─── SCROLL PROGRESS ─── */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--lime));
+  z-index: 999; transition: width .1s;
+  box-shadow: 0 0 10px var(--cyan);
+}
+
+/* ─── STICKY NAV ─── */
+.sticky-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(7,11,20,.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  overflow-x: auto; white-space: nowrap;
+}
+.sticky-nav::-webkit-scrollbar { display:none; }
+.sticky-nav ul { display:flex; list-style:none; gap:0; }
+.sticky-nav ul li a {
+  display: inline-block;
+  padding: 14px 20px; color: var(--muted);
+  text-decoration: none; font-size: 13px; font-weight: 500;
+  border-bottom: 2px solid transparent; transition: all .2s;
+}
+.sticky-nav ul li a:hover,
+.sticky-nav ul li a.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+/* ─── CONTAINER ─── */
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; position:relative; z-index:1; }
+
+/* ─── SECTION / BAB ─── */
+.bab {
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--border);
+  opacity: 0; transform: translateY(40px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.bab.visible { opacity:1; transform:translateY(0); }
+
+.bab-header {
+  display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center;
+  margin-bottom: 48px;
+}
+.bab-num-wrap {
+  position: relative;
+}
+.bab-num-wrap::after {
+  content:'';
+  position:absolute; inset:-6px; border-radius:20px;
+  background: linear-gradient(135deg, var(--cyan), var(--lime));
+  z-index:-1; filter:blur(12px); opacity:.4;
+}
+.bab-num {
+  width: 64px; height: 64px; border-radius: 18px;
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--teal) 100%);
+  color: var(--bg); font-family: 'Syne', sans-serif;
+  font-size: 1.8rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.bab-text h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800;
+  color: var(--text);
+}
+.bab-text p { color: var(--muted); font-size: 14px; margin-top:4px; }
+
+/* ─── SECTION HEADINGS ─── */
+h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--cyan); margin: 40px 0 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+h3::before { content:''; display:block; width:4px; height:18px; background:linear-gradient(var(--cyan),var(--teal)); border-radius:2px; }
+
+h4 {
+  font-size: .85rem; font-weight: 600;
+  color: var(--amber); margin: 24px 0 10px;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+p { margin-bottom: 14px; color: var(--dimmed); }
+strong { color: var(--text); font-weight: 600; }
+
+/* ─── FORMULA BOX ─── */
+.formula-box {
+  background: linear-gradient(135deg, rgba(0,229,255,.05), rgba(45,212,191,.05));
+  border: 1px solid rgba(0,229,255,.25);
+  border-left: 3px solid var(--cyan);
+  border-radius: var(--r2);
+  padding: 20px 24px 20px 28px;
+  margin: 20px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14.5px; color: var(--cyan);
+  position: relative; overflow: hidden;
+}
+.formula-box::before {
+  content: 'RUMUS';
+  position: absolute; top: -1px; right: 16px;
+  background: var(--cyan); color: var(--bg);
+  font-family: 'Outfit', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  padding: 3px 10px; border-radius: 0 0 8px 8px;
+}
+.formula-box::after {
+  content:'';
+  position:absolute; top:-40px; right:-40px; width:120px;height:120px;
+  background:radial-gradient(circle, rgba(0,229,255,.08), transparent 70%);
+  border-radius:50%;
+}
+
+/* ─── TABLES ─── */
+.table-scroll { overflow-x:auto; margin:20px 0; border-radius:var(--r2); border:1px solid var(--border2); }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+thead { background: linear-gradient(135deg, rgba(0,229,255,.08), rgba(45,212,191,.05)); }
+thead th { padding:13px 18px; text-align:left; font-weight:600; color:var(--cyan); font-size:11.5px; letter-spacing:.8px; text-transform:uppercase; border-bottom:1px solid var(--border2); }
+tbody tr { border-bottom:1px solid var(--border); transition:background .15s; }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover { background: rgba(0,229,255,.04); }
+tbody td { padding:10px 18px; color:var(--dimmed); vertical-align:top; }
+td.mono { font-family:'JetBrains Mono',monospace; color:var(--amber); font-size:13px; }
+td.green { color: var(--teal); font-weight:500; }
+
+/* ─── CALLOUTS ─── */
+.callout {
+  border-radius: var(--r2); padding: 16px 20px; margin: 18px 0;
+  font-size: 14px; display:flex; gap:14px; align-items:flex-start;
+}
+.callout-icon { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+.callout-body { flex:1; }
+.callout-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+.callout.note   { background:rgba(0,229,255,.06);  border:1px solid rgba(0,229,255,.2);  }
+.callout.note   .callout-title { color:var(--cyan); }
+.callout.warn   { background:rgba(255,107,138,.06); border:1px solid rgba(255,107,138,.2); }
+.callout.warn   .callout-title { color:var(--rose); }
+.callout.tip    { background:rgba(184,255,87,.05);  border:1px solid rgba(184,255,87,.18); }
+.callout.tip    .callout-title { color:var(--lime); }
+.callout.life   { background:rgba(255,179,71,.05);  border:1px solid rgba(255,179,71,.2); }
+.callout.life   .callout-title { color:var(--amber); }
+
+/* ─── EXAMPLE BLOCK ─── */
+.example-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--r2);
+  margin: 16px 0; overflow: hidden;
+}
+.example-header {
+  background: linear-gradient(135deg, rgba(255,179,71,.08), rgba(255,179,71,.04));
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--amber);
+}
+.example-header .ex-badge {
+  background: var(--amber); color: var(--bg);
+  font-size: 10px; padding: 2px 8px; border-radius: 50px; font-weight: 800;
+}
+.example-body { padding: 20px 24px; }
+
+.step-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.step-row:last-child { border-bottom:none; }
+.step-dot {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink:0;
+  background: linear-gradient(135deg, var(--cyan), var(--teal));
+  color: var(--bg); font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 3px;
+}
+.step-text { flex:1; color: var(--dimmed); font-size:14.5px; }
+.step-text code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(0,229,255,.08); border: 1px solid rgba(0,229,255,.2);
+  color: var(--teal); padding: 1px 7px; border-radius:5px; font-size:12.5px;
+}
+.result-box {
+  background: linear-gradient(135deg, rgba(184,255,87,.07), rgba(45,212,191,.05));
+  border: 1px solid rgba(184,255,87,.25);
+  border-radius: 10px; padding: 10px 18px; margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14.5px; color: var(--lime); font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+}
+.result-box::before { content:'✓'; font-family:'Outfit',sans-serif; font-size:16px; font-weight:800; color:var(--lime); }
+
+/* ─── GRID ─── */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+@media(max-width:640px) { .g2{grid-template-columns:1fr;} .hero-headline{font-size:2.4rem;} }
+
+/* ─── QUIZ SECTION ─── */
+.quiz-section {
+  background: linear-gradient(135deg, rgba(192,132,252,.06), rgba(0,229,255,.04));
+  border: 1px solid rgba(192,132,252,.2);
+  border-radius: 24px; margin: 40px 0; overflow: hidden;
+}
+.quiz-header {
+  background: linear-gradient(135deg, rgba(192,132,252,.1), rgba(0,229,255,.06));
+  border-bottom: 1px solid rgba(192,132,252,.2);
+  padding: 18px 28px; display:flex; align-items:center; gap:14px;
+}
+.quiz-header-icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+}
+.quiz-header-text h4 {
+  margin:0; color:var(--violet); font-size:13px; text-transform:uppercase; letter-spacing:1px;
+}
+.quiz-header-text p { margin:0; color:var(--muted); font-size:12.5px; }
+
+.quiz-body { padding: 28px; }
+
+.quiz-item {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--r2); padding: 22px 24px; margin-bottom: 20px;
+  transition: border-color .3s;
+}
+.quiz-item.correct  { border-color: rgba(184,255,87,.5); }
+.quiz-item.wrong    { border-color: rgba(255,107,138,.5); }
+.quiz-item.revealed { pointer-events:none; }
+
+.quiz-q {
+  font-weight: 600; color: var(--text); font-size: 15px; margin-bottom: 16px;
+  display:flex; gap:10px;
+}
+.q-num {
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  color: var(--bg); font-size:11px; font-weight:800;
+  min-width: 26px; height:26px; border-radius: 8px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-top:2px;
+}
+
+.quiz-options { display:flex; flex-direction:column; gap:10px; }
+.quiz-opt {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border2);
+  border-radius: 12px; padding: 12px 16px;
+  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14.5px; color: var(--dimmed);
+}
+.quiz-opt:hover { background:rgba(0,229,255,.06); border-color:rgba(0,229,255,.3); color:var(--text); }
+.quiz-opt.selected { background:rgba(192,132,252,.1); border-color:rgba(192,132,252,.4); color:var(--text); }
+.quiz-opt.opt-correct { background:rgba(184,255,87,.08); border-color:rgba(184,255,87,.4); color:var(--lime); }
+.quiz-opt.opt-wrong   { background:rgba(255,107,138,.08); border-color:rgba(255,107,138,.3); color:var(--rose); }
+.quiz-opt.opt-show-correct { background:rgba(184,255,87,.06); border-color:rgba(184,255,87,.25); color:var(--lime); }
+.opt-letter {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink:0;
+  background: rgba(255,255,255,.06); border: 1px solid var(--border2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; color:var(--muted);
+  transition: all .2s;
+}
+.quiz-opt.opt-correct .opt-letter { background:var(--lime); color:var(--bg); border-color:var(--lime); }
+.quiz-opt.opt-wrong   .opt-letter { background:var(--rose); color:var(--bg); border-color:var(--rose); }
+
+.quiz-feedback {
+  margin-top: 14px; padding: 12px 16px; border-radius: 10px;
+  font-size: 13.5px; font-weight: 500; display:none;
+  animation: popIn .3s ease;
+}
+@keyframes popIn { from{transform:scale(.95);opacity:0} to{transform:scale(1);opacity:1} }
+.quiz-feedback.correct { background:rgba(184,255,87,.1); color:var(--lime); border:1px solid rgba(184,255,87,.3); display:block; }
+.quiz-feedback.wrong   { background:rgba(255,107,138,.1); color:var(--rose); border:1px solid rgba(255,107,138,.25); display:block; }
+
+.quiz-check-btn {
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  color: var(--bg); border: none; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
+  padding: 12px 28px; border-radius: 50px; margin-top: 6px;
+  transition: all .2s; box-shadow: 0 4px 20px rgba(192,132,252,.25);
+}
+.quiz-check-btn:hover { transform:translateY(-2px); box-shadow: 0 8px 30px rgba(192,132,252,.35); }
+.quiz-check-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+/* essay style */
+.quiz-essay textarea {
+  width:100%; background:rgba(255,255,255,.03); border:1px solid var(--border2);
+  border-radius:12px; padding:14px; color:var(--text);
+  font-family:'Outfit',sans-serif; font-size:14px; line-height:1.7;
+  resize:vertical; min-height:90px; transition:border-color .2s; outline:none;
+}
+.quiz-essay textarea:focus { border-color:rgba(0,229,255,.4); }
+.quiz-essay .reveal-btn {
+  background: rgba(0,229,255,.08); border: 1px solid rgba(0,229,255,.3);
+  color:var(--cyan); cursor:pointer; font-family:'Outfit',sans-serif;
+  font-size:13px; font-weight:600; padding:10px 22px; border-radius:50px; margin-top:10px;
+  transition:all .2s;
+}
+.quiz-essay .reveal-btn:hover { background:rgba(0,229,255,.15); }
+.quiz-essay .answer-reveal {
+  margin-top:14px; padding:14px 18px; border-radius:12px;
+  background:rgba(184,255,87,.06); border:1px solid rgba(184,255,87,.2);
+  color:var(--lime); font-size:14px; display:none; animation:popIn .3s ease;
+}
+
+/* Score Panel */
+.quiz-score-panel {
+  background: linear-gradient(135deg, rgba(184,255,87,.08), rgba(0,229,255,.06));
+  border: 1px solid rgba(184,255,87,.25);
+  border-radius: 16px; padding: 20px 24px;
+  display: flex; align-items:center; gap:20px;
+  margin-top: 20px;
+}
+.score-circle {
+  width: 70px; height: 70px; border-radius: 50%;
+  background: conic-gradient(var(--lime) var(--pct, 0%), rgba(255,255,255,.06) 0%);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  position:relative;
+}
+.score-circle::before {
+  content:''; position:absolute; width:54px; height:54px;
+  border-radius:50%; background:var(--bg3);
+}
+.score-num {
+  font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800;
+  color:var(--lime); position:relative; z-index:1;
+}
+.score-info h5 { font-size:1rem; font-weight:700; color:var(--text); margin-bottom:4px; }
+.score-info p  { font-size:13px; color:var(--muted); margin:0; }
+
+/* ─── ACCORDION ─── */
+.accordion { margin: 16px 0; }
+.acc-item {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--r); margin-bottom:8px; overflow:hidden;
+}
+.acc-toggle {
+  width:100%; background:none; border:none; cursor:pointer;
+  padding: 16px 20px; text-align:left;
+  display:flex; align-items:center; gap:12px;
+  color: var(--text); font-family:'Outfit',sans-serif; font-size:15px; font-weight:600;
+  transition: background .2s;
+}
+.acc-toggle:hover { background: rgba(255,255,255,.03); }
+.acc-toggle .acc-arrow {
+  margin-left:auto; color:var(--muted); font-size:1rem;
+  transition:transform .3s; flex-shrink:0;
+}
+.acc-toggle.open .acc-arrow { transform:rotate(180deg); }
+.acc-toggle.open { color:var(--cyan); }
+.acc-body {
+  max-height:0; overflow:hidden;
+  transition: max-height .4s cubic-bezier(.4,0,.2,1), padding .3s;
+  padding: 0 20px;
+}
+.acc-body.open { max-height:2000px; padding: 0 20px 20px; }
+
+/* ─── PROGRESS TRACKER ─── */
+.bab-progress {
+  display:flex; gap:8px; align-items:center; margin-bottom:48px;
+}
+.prog-dot {
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.1); transition:all .3s;
+}
+.prog-dot.done { background:var(--lime); }
+.prog-dot.active { background:var(--cyan); transform:scale(1.5); box-shadow:0 0 8px var(--cyan); }
+.prog-line { flex:1; height:1px; background:rgba(255,255,255,.08); }
+
+/* ─── FLOATING ATOMS DECORATION ─── */
+.atom-float {
+  position:absolute; pointer-events:none; opacity:.06;
+  font-size:60px; animation: rotate 20s linear infinite;
+  color:var(--cyan);
+}
+@keyframes rotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+/* ─── ION BADGE ─── */
+.ion-badge {
+  display:inline-flex; align-items:center;
+  background: rgba(0,229,255,.08); border:1px solid rgba(0,229,255,.2);
+  border-radius:6px; padding:2px 8px; font-size:12.5px;
+  font-family:'JetBrains Mono',monospace; color:var(--cyan); margin:2px;
+}
+
+/* ─── CHAPTER COMPLETE ─── */
+.chapter-complete {
+  text-align:center; padding:32px; border-radius:20px;
+  background: linear-gradient(135deg, rgba(184,255,87,.05), rgba(0,229,255,.04));
+  border: 1px solid rgba(184,255,87,.2);
+  margin-top:40px;
+}
+.chapter-complete .cc-icon { font-size:2.5rem; margin-bottom:12px; }
+.chapter-complete h4 { font-family:'Syne',sans-serif; color:var(--lime); font-size:1.1rem; margin-bottom:6px; }
+.chapter-complete p { color:var(--muted); font-size:13.5px; margin:0; }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeSlideDown {
+  from { opacity:0; transform:translateY(-20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeSlideUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+/* ─── FOOTER ─── */
+footer {
+  position:relative;z-index:1;
+  text-align:center; padding:60px 24px;
+  border-top:1px solid var(--border); color:var(--muted); font-size:13px;
+}
+footer h3 { font-family:'Syne',sans-serif; font-size:1.4rem; color:var(--text); margin-bottom:8px; border:none; }
+footer h3::before { display:none; }
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<div class="bg-grid"></div>
+<div class="bg-orb1"></div>
+<div class="bg-orb2"></div>
+<div class="bg-orb3"></div>
+<div class="particles" id="particles"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-badge">Kimia SMA · Kelas 10 · Kurikulum Merdeka</div>
+  <h1 class="hero-headline">
+    <span class="line1">Stoikiometri &</span>
+    <span class="line2">Hukum Dasar Kimia</span>
+  </h1>
+  <p class="hero-sub">Materi interaktif lengkap dengan contoh soal bertahap dan latihan mandiri untuk menguasai stoikiometri dari akar hingga puncak, made by:@absolutelyrobi.</p>
+  <div class="hero-chapters">
+    <a href="#bab1" class="chap-pill"><span class="num">1</span>Massa Molekul Relatif</a>
+    <a href="#bab2" class="chap-pill"><span class="num">2</span>Tata Nama Senyawa</a>
+    <a href="#bab3" class="chap-pill"><span class="num">3</span>Penyetaraan Reaksi</a>
+    <a href="#bab4" class="chap-pill"><span class="num">4</span>Hukum Dasar Kimia</a>
+    <a href="#bab5" class="chap-pill"><span class="num">5</span>Konsep Mol</a>
+  </div>
+</section>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav">
+  <ul>
+    <li><a href="#bab1" class="nav-link">BAB 1 · Mr</a></li>
+    <li><a href="#bab2" class="nav-link">BAB 2 · Tata Nama</a></li>
+    <li><a href="#bab3" class="nav-link">BAB 3 · Penyetaraan</a></li>
+    <li><a href="#bab4" class="nav-link">BAB 4 · Hukum Dasar</a></li>
+    <li><a href="#bab5" class="nav-link">BAB 5 · Mol</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     BAB 1 — MASSA MOLEKUL RELATIF
+═══════════════════════════════════════════ -->
+<div class="wrap">
+<section class="bab" id="bab1">
+  <div class="bab-header">
+    <div class="bab-num-wrap"><div class="bab-num">1</div></div>
+    <div class="bab-text">
+      <h2>Massa Molekul Relatif (Mr)</h2>
+      <p>Menentukan bobot relatif suatu molekul dari tabel periodik</p>
+    </div>
+  </div>
+
+  <h3>Apa itu Mr?</h3>
+  <p><strong>Massa Molekul Relatif (Mr)</strong> adalah jumlah total dari <strong>Massa Atom Relatif (Ar)</strong> semua atom penyusun suatu molekul. Nilai ini bersifat relatif — dibandingkan terhadap standar <strong>atom karbon-12</strong>.</p>
+
+  <div class="callout note">
+    <div class="callout-icon">🔬</div>
+    <div class="callout-body">
+      <div class="callout-title">Dua Hal yang Kamu Butuhkan</div>
+      <strong>① Rumus Kimia</strong> — jenis dan jumlah atom (lihat indeks/subscript)<br>
+      <strong>② Tabel Periodik</strong> — nilai Ar setiap unsur<br><br>
+      <em>Ar penting:</em> H=1 · C=12 · N=14 · O=16 · Na=23 · Mg=24 · Al=27 · S=32 · Cl=35,5 · Ca=40 · Fe=56
+    </div>
+  </div>
+
+  <div class="formula-box">
+    Mr = Σ (Jumlah Atom × Ar)<br>
+    <span style="color:var(--teal);font-size:13px;">← Jumlahkan: semua atom dikalikan Ar masing-masing</span>
+  </div>
+
+  <h3>Cara Menghitung Mr (3 Langkah)</h3>
+
+  <div class="accordion">
+    <div class="acc-item">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span style="background:var(--cyan);color:var(--bg);width:24px;height:24px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">1</span>
+        Identifikasi Rumus Kimia
+        <span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body">
+        <p>Baca rumus kimia dan catat berapa atom tiap unsur. Perhatikan angka <strong>indeks</strong> (subscript) dan angka di luar <strong>kurung</strong>.</p>
+        <p>Contoh: <code style="font-family:'JetBrains Mono',monospace;background:rgba(0,229,255,.08);color:var(--teal);padding:2px 8px;border-radius:5px;">Ca(OH)₂</code> → Ca=1 atom, O=2 atom, H=2 atom (angka 2 di luar kurung mengalikan semua isi kurung)</p>
+      </div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span style="background:var(--cyan);color:var(--bg);width:24px;height:24px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">2</span>
+        Cari Nilai Ar di Tabel Periodik
+        <span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body">
+        <p>Gunakan tabel periodik untuk mencari Ar setiap unsur yang ada dalam rumus kimia. Nilai Ar biasanya berupa bilangan bulat atau satu desimal.</p>
+      </div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span style="background:var(--cyan);color:var(--bg);width:24px;height:24px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">3</span>
+        Kalikan dan Jumlahkan
+        <span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body">
+        <p>Mr = (jml atom unsur 1 × Ar₁) + (jml atom unsur 2 × Ar₂) + ... sampai semua unsur terhitung.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Contoh Perhitungan Mr</h3>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 1</span>Air — H₂O (paling dasar)</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Unsur dalam H₂O: <strong>H</strong> = 2 atom, <strong>O</strong> = 1 atom</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">Ar H = 1 · Ar O = 16</div></div>
+      <div class="step-row"><div class="step-dot">3</div><div class="step-text">Mr = <code>(2 × 1) + (1 × 16)</code> = 2 + 16</div></div>
+      <div class="result-box">Mr H₂O = 18</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 2</span>Asam Sulfat — H₂SO₄</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Unsur: <strong>H</strong>=2, <strong>S</strong>=1, <strong>O</strong>=4 atom</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">Ar H=1, S=32, O=16</div></div>
+      <div class="step-row"><div class="step-dot">3</div><div class="step-text">Mr = <code>(2×1) + (1×32) + (4×16)</code> = 2 + 32 + 64</div></div>
+      <div class="result-box">Mr H₂SO₄ = 98</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 3</span>Kalsium Hidroksida — Ca(OH)₂ ← ada kurung!</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Ca(OH)₂: angka 2 di luar kurung → O=<strong>2</strong> atom, H=<strong>2</strong> atom; Ca=<strong>1</strong> atom</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">Ar Ca=40, O=16, H=1</div></div>
+      <div class="step-row"><div class="step-dot">3</div><div class="step-text">Mr = <code>(1×40) + (2×16) + (2×1)</code> = 40 + 32 + 2</div></div>
+      <div class="result-box">Mr Ca(OH)₂ = 74</div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Jebakan Kurung!</div>
+      Ca(OH)₂ bukan (Ca=1, O=1, H=1) → melainkan (Ca=1, O=2, H=2). Angka di luar kurung mengalikan SEMUA atom di dalam kurung!
+    </div>
+  </div>
+
+  <!-- TABEL RINGKASAN -->
+  <h3>Tabel Referensi Mr Senyawa Umum</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Senyawa</th><th>Rumus</th><th>Perhitungan</th><th>Mr</th></tr></thead>
+      <tbody>
+        <tr><td>Air</td><td class="mono">H₂O</td><td>(2×1)+(1×16)</td><td class="green">18</td></tr>
+        <tr><td>Karbon Dioksida</td><td class="mono">CO₂</td><td>(1×12)+(2×16)</td><td class="green">44</td></tr>
+        <tr><td>Asam Sulfat</td><td class="mono">H₂SO₄</td><td>(2×1)+(1×32)+(4×16)</td><td class="green">98</td></tr>
+        <tr><td>Glukosa</td><td class="mono">C₆H₁₂O₆</td><td>(6×12)+(12×1)+(6×16)</td><td class="green">180</td></tr>
+        <tr><td>Natrium Klorida</td><td class="mono">NaCl</td><td>(1×23)+(1×35,5)</td><td class="green">58,5</td></tr>
+        <tr><td>Kalsium Hidroksida</td><td class="mono">Ca(OH)₂</td><td>(1×40)+(2×16)+(2×1)</td><td class="green">74</td></tr>
+        <tr><td>Amonia</td><td class="mono">NH₃</td><td>(1×14)+(3×1)</td><td class="green">17</td></tr>
+        <tr><td>Aluminium Sulfat</td><td class="mono">Al₂(SO₄)₃</td><td>(2×27)+(3×32)+(12×16)</td><td class="green">342</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── QUIZ BAB 1 ── -->
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <div class="quiz-header-icon">🧪</div>
+      <div class="quiz-header-text">
+        <h4>Latihan Soal — BAB 1</h4>
+        <p>Uji pemahamanmu tentang Massa Molekul Relatif</p>
+      </div>
+    </div>
+    <div class="quiz-body" id="quiz-bab1">
+
+      <div class="quiz-item" data-correct="c" id="q1_1">
+        <div class="quiz-q"><span class="q-num">1</span>Berapakah Mr dari CO₂? (Ar C=12, O=16)</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_1')"><span class="opt-letter">A</span>28</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_1')"><span class="opt-letter">B</span>40</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_1')"><span class="opt-letter">C</span>44</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_1')"><span class="opt-letter">D</span>56</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q1_1', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q1_1_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="b" id="q1_2">
+        <div class="quiz-q"><span class="q-num">2</span>Mr dari glukosa C₆H₁₂O₆ adalah... (Ar C=12, H=1, O=16)</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_2')"><span class="opt-letter">A</span>160</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_2')"><span class="opt-letter">B</span>180</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_2')"><span class="opt-letter">C</span>200</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_2')"><span class="opt-letter">D</span>192</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q1_2', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q1_2_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="d" id="q1_3">
+        <div class="quiz-q"><span class="q-num">3</span>Dalam Ca(OH)₂, berapa total atom O yang dihitung untuk Mr? (Ar Ca=40, O=16, H=1)</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_3')"><span class="opt-letter">A</span>1 atom O</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_3')"><span class="opt-letter">B</span>3 atom O</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_3')"><span class="opt-letter">C</span>4 atom O</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q1_3')"><span class="opt-letter">D</span>2 atom O → Mr = 74</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q1_3', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q1_3_fb"></div>
+      </div>
+
+      <div class="quiz-item quiz-essay" id="q1_4">
+        <div class="quiz-q"><span class="q-num">4</span>Hitung Mr dari Al₂(SO₄)₃. Ar Al=27, S=32, O=16. Tuliskan langkah perhitunganmu!</div>
+        <textarea placeholder="Contoh cara mengerjakan: Al ada 2 atom → 2×27=54, kemudian..."></textarea>
+        <button class="reveal-btn" onclick="revealEssay(this)">Lihat Pembahasan</button>
+        <div class="answer-reveal">
+          ✅ <strong>Pembahasan:</strong><br>
+          Al₂(SO₄)₃ → Al=2 atom, S=3 atom (angka 3 di luar kurung × 1 S), O=12 atom (3×4)<br>
+          Mr = (2×27) + (3×32) + (12×16)<br>
+          = 54 + 96 + 192 = <strong>342</strong>
+        </div>
+      </div>
+
+      <div id="score-bab1" style="display:none"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BAB 2 — TATA NAMA SENYAWA
+═══════════════════════════════════════════ -->
+<section class="bab" id="bab2">
+  <div class="bab-header">
+    <div class="bab-num-wrap"><div class="bab-num" style="background:linear-gradient(135deg,var(--lime),var(--teal));">2</div></div>
+    <div class="bab-text">
+      <h2>Tata Nama Senyawa</h2>
+      <p>Aturan IUPAC untuk memberi nama senyawa kimia</p>
+    </div>
+  </div>
+
+  <h3>A — Senyawa Biner: Logam + Non-Logam (Ion Sederhana)</h3>
+  <p>Aturan: <strong>Nama Logam + Nama Non-Logam (akhiran diganti -ida)</strong></p>
+  <div class="callout tip">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <div class="callout-title">Perubahan Nama Non-Logam</div>
+      Klorin → <strong>Klorida</strong> · Oksigen → <strong>Oksida</strong> · Brom → <strong>Bromida</strong> · Fluor → <strong>Fluorida</strong> · Iod → <strong>Iodida</strong> · Sulfur → <strong>Sulfida</strong>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>Logam Gol. A + Non-Logam</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>NaCl</code> → Natrium + Klorida = <strong>Natrium Klorida</strong></div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>MgO</code> → Magnesium + Oksida = <strong>Magnesium Oksida</strong></div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>CaCl₂</code> → Kalsium + Klorida = <strong>Kalsium Klorida</strong> (tidak perlu angka, jumlah ion ditentukan muatan)</div></div>
+    </div>
+  </div>
+
+  <h3>B — Logam Multi-Biloks + Non-Logam</h3>
+  <p>Logam golongan B seperti Fe, Cu, Mn punya lebih dari satu bilangan oksidasi. Gunakan angka romawi.</p>
+  <p>Aturan: <strong>Nama Logam + (Bilangan Romawi) + -ida</strong></p>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>Logam dengan lebih dari 1 biloks</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>FeCl₂</code> → Fe²⁺ + 2Cl⁻ → biloks Fe = +2 → <strong>Besi(II) Klorida</strong></div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>FeCl₃</code> → Fe³⁺ + 3Cl⁻ → biloks Fe = +3 → <strong>Besi(III) Klorida</strong></div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>Cu₂O</code> → 2Cu⁺ + O²⁻ → biloks Cu = +1 → <strong>Tembaga(I) Oksida</strong></div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>CuO</code> → Cu²⁺ + O²⁻ → biloks Cu = +2 → <strong>Tembaga(II) Oksida</strong></div></div>
+    </div>
+  </div>
+
+  <h3>C — Non-Logam + Non-Logam (Senyawa Kovalen)</h3>
+  <p>Gunakan awalan Yunani. <strong>Mono- tidak dipakai di depan unsur pertama.</strong></p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Angka</th><th>Awalan</th><th>Angka</th><th>Awalan</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>Mono-</td><td class="mono">6</td><td>Heksa-</td></tr>
+        <tr><td class="mono">2</td><td>Di-</td><td class="mono">7</td><td>Hepta-</td></tr>
+        <tr><td class="mono">3</td><td>Tri-</td><td class="mono">8</td><td>Okta-</td></tr>
+        <tr><td class="mono">4</td><td>Tetra-</td><td class="mono">9</td><td>Nona-</td></tr>
+        <tr><td class="mono">5</td><td>Penta-</td><td class="mono">10</td><td>Deka-</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>Senyawa Kovalen Biner</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>CO</code> → Karbon + <em>mono</em>oksida = <strong>Karbon Monoksida</strong> (mono di depan unsur kedua boleh)</div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>CO₂</code> → Karbon + <em>di</em>oksida = <strong>Karbon Dioksida</strong></div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>N₂O₅</code> → <em>di</em>nitrogen + <em>penta</em>oksida = <strong>Dinitrogen Pentaoksida</strong></div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text"><code>PCl₃</code> → Fosfor + <em>tri</em>klorida = <strong>Fosfor Triklorida</strong></div></div>
+    </div>
+  </div>
+
+  <h3>D — Ion Poliatomik (Hafal Wajib!)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Nama Ion</th><th>Rumus</th><th>Muatan</th><th>Nama Ion</th><th>Rumus</th><th>Muatan</th></tr></thead>
+      <tbody>
+        <tr><td>Sulfat</td><td class="mono">SO₄²⁻</td><td class="green">-2</td><td>Nitrat</td><td class="mono">NO₃⁻</td><td class="green">-1</td></tr>
+        <tr><td>Sulfit</td><td class="mono">SO₃²⁻</td><td class="green">-2</td><td>Nitrit</td><td class="mono">NO₂⁻</td><td class="green">-1</td></tr>
+        <tr><td>Fosfat</td><td class="mono">PO₄³⁻</td><td class="green">-3</td><td>Karbonat</td><td class="mono">CO₃²⁻</td><td class="green">-2</td></tr>
+        <tr><td>Bikarbonat</td><td class="mono">HCO₃⁻</td><td class="green">-1</td><td>Hidroksida</td><td class="mono">OH⁻</td><td class="green">-1</td></tr>
+        <tr><td>Amonium</td><td class="mono">NH₄⁺</td><td style="color:var(--rose)">+1</td><td>Permanganat</td><td class="mono">MnO₄⁻</td><td class="green">-1</td></tr>
+        <tr><td>Kromat</td><td class="mono">CrO₄²⁻</td><td class="green">-2</td><td>Dikromat</td><td class="mono">Cr₂O₇²⁻</td><td class="green">-2</td></tr>
+        <tr><td>Klorat</td><td class="mono">ClO₃⁻</td><td class="green">-1</td><td>Perklorat</td><td class="mono">ClO₄⁻</td><td class="green">-1</td></tr>
+        <tr><td>Hipoklorit</td><td class="mono">ClO⁻</td><td class="green">-1</td><td>Asetat</td><td class="mono">CH₃COO⁻</td><td class="green">-1</td></tr>
+        <tr><td>Sianida</td><td class="mono">CN⁻</td><td class="green">-1</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>E — Tata Nama Asam & Basa</h3>
+  <div class="g2">
+    <div>
+      <h4>Asam</h4>
+      <p style="font-size:13px;">Senyawa yang menghasilkan ion H⁺ dalam air.<br>Nama = <strong>Asam + nama anion</strong></p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Rumus</th><th>Nama</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">HCl</td><td>Asam Klorida</td></tr>
+            <tr><td class="mono">H₂SO₄</td><td>Asam Sulfat</td></tr>
+            <tr><td class="mono">HNO₃</td><td>Asam Nitrat</td></tr>
+            <tr><td class="mono">H₃PO₄</td><td>Asam Fosfat</td></tr>
+            <tr><td class="mono">H₂CO₃</td><td>Asam Karbonat</td></tr>
+            <tr><td class="mono">CH₃COOH</td><td>Asam Asetat</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h4>Basa</h4>
+      <p style="font-size:13px;">Senyawa yang menghasilkan OH⁻ dalam air.<br>Nama = <strong>nama kation + Hidroksida</strong></p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Rumus</th><th>Nama</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">NaOH</td><td>Natrium Hidroksida</td></tr>
+            <tr><td class="mono">KOH</td><td>Kalium Hidroksida</td></tr>
+            <tr><td class="mono">Ca(OH)₂</td><td>Kalsium Hidroksida</td></tr>
+            <tr><td class="mono">Al(OH)₃</td><td>Aluminium Hidroksida</td></tr>
+            <tr><td class="mono">Fe(OH)₂</td><td>Besi(II) Hidroksida</td></tr>
+            <tr><td class="mono">Fe(OH)₃</td><td>Besi(III) Hidroksida</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ BAB 2 -->
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <div class="quiz-header-icon">🏷️</div>
+      <div class="quiz-header-text">
+        <h4>Latihan Soal — BAB 2</h4>
+        <p>Uji kemampuan memberi nama senyawa kimia</p>
+      </div>
+    </div>
+    <div class="quiz-body">
+
+      <div class="quiz-item" data-correct="b" id="q2_1">
+        <div class="quiz-q"><span class="q-num">1</span>Nama IUPAC yang benar untuk FeCl₃ adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_1')"><span class="opt-letter">A</span>Fero Klorida</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_1')"><span class="opt-letter">B</span>Besi(III) Klorida</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_1')"><span class="opt-letter">C</span>Besi Triklorida</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_1')"><span class="opt-letter">D</span>Feri(III) Klorida</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q2_1', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q2_1_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="c" id="q2_2">
+        <div class="quiz-q"><span class="q-num">2</span>Senyawa N₂O₄ dinamai...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_2')"><span class="opt-letter">A</span>Nitrogen Tetraoksida</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_2')"><span class="opt-letter">B</span>Mononitrogen Tetraoksida</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_2')"><span class="opt-letter">C</span>Dinitrogen Tetraoksida</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_2')"><span class="opt-letter">D</span>Dinitrogen Tetroksida</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q2_2', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q2_2_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="a" id="q2_3">
+        <div class="quiz-q"><span class="q-num">3</span>Rumus kimia dari Aluminium Sulfat adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_3')"><span class="opt-letter">A</span>Al₂(SO₄)₃</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_3')"><span class="opt-letter">B</span>Al₃(SO₄)₂</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_3')"><span class="opt-letter">C</span>Al(SO₄)₃</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_3')"><span class="opt-letter">D</span>AlSO₄</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q2_3', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q2_3_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="d" id="q2_4">
+        <div class="quiz-q"><span class="q-num">4</span>Ion SO₄²⁻ disebut ion...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_4')"><span class="opt-letter">A</span>Sulfit</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_4')"><span class="opt-letter">B</span>Sulida</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_4')"><span class="opt-letter">C</span>Sulfat(IV)</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q2_4')"><span class="opt-letter">D</span>Sulfat</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q2_4', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q2_4_fb"></div>
+      </div>
+
+      <div id="score-bab2" style="display:none"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BAB 3 — PENYETARAAN REAKSI
+═══════════════════════════════════════════ -->
+<section class="bab" id="bab3">
+  <div class="bab-header">
+    <div class="bab-num-wrap"><div class="bab-num" style="background:linear-gradient(135deg,var(--amber),var(--rose));">3</div></div>
+    <div class="bab-text">
+      <h2>Penyetaraan Reaksi Kimia</h2>
+      <p>Memastikan atom di kiri = atom di kanan (Hukum Lavoisier)</p>
+    </div>
+  </div>
+
+  <div class="callout note">
+    <div class="callout-icon">⚖️</div>
+    <div class="callout-body">
+      <div class="callout-title">Prinsip Utama</div>
+      <strong>Jumlah atom setiap unsur di ruas kiri HARUS SAMA dengan ruas kanan.</strong><br>
+      Yang boleh diubah hanya <strong>koefisien</strong> (angka di depan rumus). Indeks (subscript) TIDAK BOLEH diubah. Koefisien TIDAK BOLEH pecahan!
+    </div>
+  </div>
+
+  <h3>Cara 1: Metode Inspeksi (Trial & Error)</h3>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 1</span>KClO₃ → KCl + O₂</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Cek atom: K=1=1✓, Cl=1=1✓, O: kiri=3, kanan=2 ✗</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">Samakan O: butuh koef O₂ = 3/2 → <em>pecahan! kalikan semua ×2</em></div></div>
+      <div class="step-row"><div class="step-dot">3</div><div class="step-text">Semua koefisien ×2: <code>2KClO₃ → 2KCl + 3O₂</code></div></div>
+      <div class="step-row"><div class="step-dot">4</div><div class="step-text">Cek ulang: K=2=2✓, Cl=2=2✓, O=6=6✓</div></div>
+      <div class="result-box">2KClO₃ → 2KCl + 3O₂  ✓ Sudah setara!</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 2</span>C₃H₈ + O₂ → CO₂ + H₂O (Pembakaran Propana)</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Setarakan C: C₃H₈ punya 3C → koef CO₂ = <strong>3</strong></div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">Setarakan H: C₃H₈ punya 8H → koef H₂O = <strong>4</strong></div></div>
+      <div class="step-row"><div class="step-dot">3</div><div class="step-text">Hitung O di kanan: (3×2) + (4×1) = 10 → koef O₂ = <strong>5</strong></div></div>
+      <div class="step-row"><div class="step-dot">4</div><div class="step-text">Cek: C 3=3✓, H 8=8✓, O 10=10✓</div></div>
+      <div class="result-box">C₃H₈ + 5O₂ → 3CO₂ + 4H₂O</div>
+    </div>
+  </div>
+
+  <h3>Cara 2: Metode Aljabar (Matematis)</h3>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>Fe + O₂ → Fe₂O₃ — dengan variabel</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Beri variabel: <code>a·Fe + b·O₂ → c·Fe₂O₃</code></div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">Persamaan: Fe → a = 2c | O → 2b = 3c</div></div>
+      <div class="step-row"><div class="step-dot">3</div><div class="step-text">Misalkan c=2 → a=4 → 2b=6 → b=3</div></div>
+      <div class="result-box">4Fe + 3O₂ → 2Fe₂O₃</div>
+    </div>
+  </div>
+
+  <!-- QUIZ BAB 3 -->
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <div class="quiz-header-icon">⚗️</div>
+      <div class="quiz-header-text">
+        <h4>Latihan Soal — BAB 3</h4>
+        <p>Uji kemampuan menyetarakan persamaan reaksi</p>
+      </div>
+    </div>
+    <div class="quiz-body">
+
+      <div class="quiz-item" data-correct="c" id="q3_1">
+        <div class="quiz-q"><span class="q-num">1</span>Persamaan setara untuk Al + O₂ → Al₂O₃ adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_1')"><span class="opt-letter">A</span>2Al + O₂ → Al₂O₃</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_1')"><span class="opt-letter">B</span>Al + O₂ → Al₂O₃</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_1')"><span class="opt-letter">C</span>4Al + 3O₂ → 2Al₂O₃</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_1')"><span class="opt-letter">D</span>2Al + 3O₂ → Al₂O₃</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q3_1', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q3_1_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="b" id="q3_2">
+        <div class="quiz-q"><span class="q-num">2</span>Pada reaksi: H₂ + O₂ → H₂O, koefisien yang benar adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_2')"><span class="opt-letter">A</span>1 · 1 · 1</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_2')"><span class="opt-letter">B</span>2 · 1 · 2</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_2')"><span class="opt-letter">C</span>1 · 2 · 2</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q3_2')"><span class="opt-letter">D</span>2 · 2 · 4</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q3_2', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q3_2_fb"></div>
+      </div>
+
+      <div class="quiz-item quiz-essay" id="q3_3">
+        <div class="quiz-q"><span class="q-num">3</span>Setarakan reaksi pembakaran: CH₄ + O₂ → CO₂ + H₂O. Tuliskan koefisiennya!</div>
+        <textarea placeholder="Tulis langkah-langkahmu di sini..."></textarea>
+        <button class="reveal-btn" onclick="revealEssay(this)">Lihat Pembahasan</button>
+        <div class="answer-reveal">
+          ✅ <strong>Jawaban: CH₄ + 2O₂ → CO₂ + 2H₂O</strong><br>
+          Langkah: C sudah setara (1=1). H: CH₄ punya 4H → H₂O koef=2. O: kanan=(1×2)+(2×1)=4 → O₂ koef=2.
+        </div>
+      </div>
+
+      <div id="score-bab3" style="display:none"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BAB 4 — HUKUM DASAR KIMIA
+═══════════════════════════════════════════ -->
+<section class="bab" id="bab4">
+  <div class="bab-header">
+    <div class="bab-num-wrap"><div class="bab-num" style="background:linear-gradient(135deg,var(--violet),var(--rose));">4</div></div>
+    <div class="bab-text">
+      <h2>Hukum-Hukum Dasar Kimia</h2>
+      <p>5 hukum fundamental yang menjadi fondasi stoikiometri</p>
+    </div>
+  </div>
+
+  <!-- LAVOISIER -->
+  <h3>4.1 Hukum Lavoisier — Kekekalan Massa</h3>
+  <div class="callout note">
+    <div class="callout-icon">📜</div>
+    <div class="callout-body">
+      <div class="callout-title">Antoine Lavoisier (Prancis, 1789)</div>
+      <em>"Massa total zat-zat sebelum reaksi sama dengan massa total zat-zat sesudah reaksi."</em>
+    </div>
+  </div>
+  <div class="callout life">
+    <div class="callout-icon">🚗</div>
+    <div class="callout-body">
+      <div class="callout-title">Koneksi Kehidupan Nyata</div>
+      Saat bensin terbakar, bensin+oksigen berubah jadi CO₂+H₂O+energi. Massa bensin+oksigen = massa CO₂+H₂O yang dihasilkan. Tidak ada massa yang hilang, hanya berubah bentuk!
+    </div>
+  </div>
+  <div class="formula-box">m reaktan = m produk</div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>C + O₂ → CO₂</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text">3 gram C + 8 gram O₂ bereaksi. Massa CO₂ = 3 + 8 = <strong>11 gram</strong></div></div>
+    </div>
+  </div>
+
+  <!-- PROUST -->
+  <h3>4.2 Hukum Proust — Perbandingan Tetap</h3>
+  <div class="callout note">
+    <div class="callout-icon">📜</div>
+    <div class="callout-body">
+      <div class="callout-title">Joseph Louis Proust (Prancis, 1799)</div>
+      <em>"Perbandingan massa unsur penyusun suatu senyawa adalah selalu tetap."</em>
+    </div>
+  </div>
+  <div class="formula-box">H₂O: H : O = 1 : 8 (selalu, dari mana pun sumbernya)</div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>Perbandingan massa H dan O dalam H₂O</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Mr H₂ = 2×1 = 2 (massa H dalam 1 mol H₂O)</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">Mr O = 1×16 = 16 (massa O dalam 1 mol H₂O)</div></div>
+      <div class="step-row"><div class="step-dot">3</div><div class="step-text">Perbandingan H:O = 2:16 = <strong>1:8</strong></div></div>
+      <div class="result-box">H : O dalam H₂O = 1 : 8 (tetap!)</div>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Senyawa</th><th>Rumus</th><th>Perbandingan Massa Unsur</th></tr></thead>
+      <tbody>
+        <tr><td>Air</td><td class="mono">H₂O</td><td>H : O = 1 : 8</td></tr>
+        <tr><td>Karbon Dioksida</td><td class="mono">CO₂</td><td>C : O = 3 : 8</td></tr>
+        <tr><td>Amonia</td><td class="mono">NH₃</td><td>N : H = 14 : 3</td></tr>
+        <tr><td>Asam Sulfat</td><td class="mono">H₂SO₄</td><td>H : S : O = 1 : 16 : 32</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DALTON -->
+  <h3>4.3 Hukum Dalton — Perbandingan Berganda</h3>
+  <div class="callout note">
+    <div class="callout-icon">📜</div>
+    <div class="callout-body">
+      <div class="callout-title">John Dalton (Inggris, 1803)</div>
+      <em>"Jika dua unsur membentuk lebih dari satu senyawa, dan massa salah satu unsur dibuat tetap, maka perbandingan massa unsur lainnya merupakan bilangan bulat sederhana."</em>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>CO dan CO₂ (kedua senyawa mengandung C dan O)</div>
+    <div class="example-body">
+      <div class="table-scroll" style="margin:0 0 12px;">
+        <table>
+          <thead><tr><th>Senyawa</th><th>Massa C</th><th>Massa O</th></tr></thead>
+          <tbody>
+            <tr><td>CO</td><td class="green">1,2 gr (tetap)</td><td class="mono">1,6 gr</td></tr>
+            <tr><td>CO₂</td><td class="green">1,2 gr (tetap)</td><td class="mono">3,2 gr</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="step-row"><div class="step-dot">→</div><div class="step-text">Massa C dibuat sama → Perbandingan O = 1,6 : 3,2 = <strong>1 : 2</strong> ✓ (bilangan bulat sederhana)</div></div>
+      <div class="result-box">Perbandingan O dalam CO : CO₂ = 1 : 2</div>
+    </div>
+  </div>
+
+  <!-- GAY-LUSSAC -->
+  <h3>4.4 Hukum Gay-Lussac — Perbandingan Volume</h3>
+  <div class="callout note">
+    <div class="callout-icon">📜</div>
+    <div class="callout-body">
+      <div class="callout-title">Joseph Louis Gay-Lussac (Prancis, 1808)</div>
+      <em>"Pada suhu dan tekanan yang sama, perbandingan volume gas-gas yang bereaksi sama dengan perbandingan koefisiennya."</em>
+    </div>
+  </div>
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Hanya untuk GAS!</div>
+      Hukum ini HANYA berlaku untuk zat berwujud gas, dan harus pada suhu dan tekanan yang sama!
+    </div>
+  </div>
+  <div class="formula-box">koefisien X / koefisien Y = volume X / volume Y</div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH</span>N₂ + 3H₂ → 2NH₃</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text">Perbandingan volume = koefisien = N₂ : H₂ : NH₃ = 1 : 3 : 2</div></div>
+      <div class="step-row"><div class="step-dot">✓</div><div class="step-text">Jika N₂ = 5 L → H₂ = 15 L → NH₃ = 10 L</div></div>
+      <div class="result-box">5 L N₂ + 15 L H₂ → 10 L NH₃</div>
+    </div>
+  </div>
+
+  <!-- AVOGADRO -->
+  <h3>4.5 Hukum Avogadro</h3>
+  <div class="callout note">
+    <div class="callout-icon">📜</div>
+    <div class="callout-body">
+      <div class="callout-title">Amedeo Avogadro (Italia, 1811)</div>
+      <em>"Pada suhu dan tekanan yang sama, volume gas yang sama mengandung jumlah molekul yang sama."</em>
+    </div>
+  </div>
+  <div class="formula-box">
+    koef X / koef Y = volume X / volume Y = jumlah molekul X / jumlah molekul Y<br>
+    <span style="color:var(--teal);font-size:13px;">1 mol = 6,022 × 10²³ partikel (Bilangan Avogadro)</span>
+  </div>
+
+  <!-- TABEL PERBANDINGAN 5 HUKUM -->
+  <h3>Tabel Ringkasan 5 Hukum Dasar Kimia</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Hukum</th><th>Tokoh</th><th>Inti</th><th>Berlaku untuk</th><th>Contoh</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--cyan);font-weight:600;">Lavoisier</td><td>Prancis (1789)</td><td>m sebelum = m sesudah</td><td>Semua zat</td><td>C+O₂→CO₂: 3+8=11 gr</td></tr>
+        <tr><td style="color:var(--lime);font-weight:600;">Proust</td><td>Prancis (1799)</td><td>Perbandingan massa unsur tetap</td><td>Senyawa murni</td><td>H:O dalam H₂O = 1:8</td></tr>
+        <tr><td style="color:var(--amber);font-weight:600;">Dalton</td><td>Inggris (1803)</td><td>Perbandingan berganda = bilangan bulat</td><td>≥2 senyawa dari unsur sama</td><td>O dlm CO:CO₂ = 1:2</td></tr>
+        <tr><td style="color:var(--rose);font-weight:600;">Gay-Lussac</td><td>Prancis (1808)</td><td>Perbandingan volume = koefisien</td><td>Gas saja, T&P sama</td><td>N₂:H₂:NH₃=1:3:2</td></tr>
+        <tr><td style="color:var(--violet);font-weight:600;">Avogadro</td><td>Italia (1811)</td><td>Volume sama → mol sama</td><td>Gas pada T&P sama</td><td>1 mol=6,022×10²³</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- QUIZ BAB 4 -->
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <div class="quiz-header-icon">⚖️</div>
+      <div class="quiz-header-text">
+        <h4>Latihan Soal — BAB 4</h4>
+        <p>Uji pemahamanmu tentang hukum-hukum dasar kimia</p>
+      </div>
+    </div>
+    <div class="quiz-body">
+
+      <div class="quiz-item" data-correct="b" id="q4_1">
+        <div class="quiz-q"><span class="q-num">1</span>Jika 4 gram S bereaksi dengan 4 gram O₂ dan sisa S = 2 gram, massa SO₂ yang terbentuk adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_1')"><span class="opt-letter">A</span>4 gram</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_1')"><span class="opt-letter">B</span>6 gram</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_1')"><span class="opt-letter">C</span>8 gram</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_1')"><span class="opt-letter">D</span>10 gram</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q4_1', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q4_1_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="c" id="q4_2">
+        <div class="quiz-q"><span class="q-num">2</span>Dalam H₂O, jika massa H = 2 gram, berapakah massa O? (H:O = 1:8)</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_2')"><span class="opt-letter">A</span>8 gram</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_2')"><span class="opt-letter">B</span>4 gram</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_2')"><span class="opt-letter">C</span>16 gram</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_2')"><span class="opt-letter">D</span>12 gram</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q4_2', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q4_2_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="a" id="q4_3">
+        <div class="quiz-q"><span class="q-num">3</span>Reaksi: N₂ + 3H₂ → 2NH₃. Jika N₂ = 4 L, berapa volume NH₃ yang terbentuk? (T,P sama)</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_3')"><span class="opt-letter">A</span>8 L</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_3')"><span class="opt-letter">B</span>4 L</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_3')"><span class="opt-letter">C</span>12 L</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_3')"><span class="opt-letter">D</span>6 L</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q4_3', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q4_3_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="d" id="q4_4">
+        <div class="quiz-q"><span class="q-num">4</span>Hukum Dalton menyatakan bahwa perbandingan massa unsur kedua (jika unsur pertama dibuat tetap) adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_4')"><span class="opt-letter">A</span>Selalu sama untuk semua senyawa</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_4')"><span class="opt-letter">B</span>Berupa bilangan desimal kecil</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_4')"><span class="opt-letter">C</span>Bergantung pada cara pembuatan senyawa</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q4_4')"><span class="opt-letter">D</span>Bilangan bulat dan sederhana</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q4_4', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q4_4_fb"></div>
+      </div>
+
+      <div id="score-bab4" style="display:none"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BAB 5 — KONSEP MOL
+═══════════════════════════════════════════ -->
+<section class="bab" id="bab5">
+  <div class="bab-header">
+    <div class="bab-num-wrap"><div class="bab-num" style="background:linear-gradient(135deg,var(--teal),var(--lime));">5</div></div>
+    <div class="bab-text">
+      <h2>Konsep Mol</h2>
+      <p>Jembatan antara massa, volume, dan jumlah partikel</p>
+    </div>
+  </div>
+
+  <h3>Apa itu Mol?</h3>
+  <p><strong>Mol</strong> adalah satuan SI untuk menyatakan jumlah zat. 1 mol zat mengandung tepat <strong>6,022 × 10²³</strong> partikel — disebut <strong>Bilangan Avogadro (Nₐ)</strong>.</p>
+
+  <div class="callout note">
+    <div class="callout-icon">⚛️</div>
+    <div class="callout-body">
+      <div class="callout-title">Contoh Nyata Bilangan Avogadro</div>
+      1 mol Fe = 6,02×10²³ atom Fe<br>
+      1 mol H₂ = 6,02×10²³ molekul H₂<br>
+      1 mol H₂O = 6,02×10²³ molekul H₂O<br>
+      1 mol Ca²⁺ = 6,02×10²³ ion Ca²⁺
+    </div>
+  </div>
+
+  <h3>Hubungan Mol dengan Besaran Lain</h3>
+  <div class="g2">
+    <div class="formula-box" style="font-size:13px;">
+      <strong>Mol ↔ Jumlah Partikel</strong><br><br>
+      n = JP / (6,022 × 10²³)<br>
+      JP = n × 6,022 × 10²³
+    </div>
+    <div class="formula-box" style="font-size:13px;">
+      <strong>Mol ↔ Massa</strong><br><br>
+      n = m / Ar (untuk atom/unsur)<br>
+      n = m / Mr (untuk senyawa)<br>
+      m = n × Ar atau Mr
+    </div>
+    <div class="formula-box" style="font-size:13px;">
+      <strong>Mol ↔ Volume (STP: 0°C, 1 atm)</strong><br><br>
+      n = V / 22,4<br>
+      V = n × 22,4 L
+    </div>
+    <div class="formula-box" style="font-size:13px;">
+      <strong>Mol ↔ Volume (RTP: 25°C, 1 atm)</strong><br><br>
+      n = V / 24<br>
+      V = n × 24 L
+    </div>
+  </div>
+  <div class="formula-box" style="font-size:13.5px;">
+    <strong>Kondisi Tidak Standar:</strong>  PV = nRT<br>
+    P = tekanan (atm) · V = volume (L) · n = mol · R = 0,082 · T = suhu Kelvin (°C + 273)
+  </div>
+
+  <h3>Contoh Soal Konsep Mol</h3>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 1</span>Berapa mol 36 gram air (H₂O)?</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">Mr H₂O = (2×1) + (1×16) = 18 g/mol</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">n = m / Mr = 36 / 18</div></div>
+      <div class="result-box">n = 2 mol H₂O</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 2</span>Berapa molekul dalam 0,5 mol CO₂?</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">JP = n × 6,022 × 10²³</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">JP = 0,5 × 6,022 × 10²³</div></div>
+      <div class="result-box">JP = 3,011 × 10²³ molekul CO₂</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 3</span>Berapa volume 2 mol O₂ pada STP?</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">V = n × 22,4 (di STP)</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">V = 2 × 22,4</div></div>
+      <div class="result-box">V = 44,8 L pada STP</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header"><span class="ex-badge">CONTOH 4</span>Gas ideal: 0,5 mol, T=27°C, P=1 atm. Berapa volumenya?</div>
+    <div class="example-body">
+      <div class="step-row"><div class="step-dot">1</div><div class="step-text">T = 27 + 273 = 300 K; R = 0,082</div></div>
+      <div class="step-row"><div class="step-dot">2</div><div class="step-text">PV = nRT → V = nRT/P = (0,5 × 0,082 × 300) / 1</div></div>
+      <div class="result-box">V = 12,3 L</div>
+    </div>
+  </div>
+
+  <!-- QUIZ BAB 5 -->
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <div class="quiz-header-icon">🔭</div>
+      <div class="quiz-header-text">
+        <h4>Latihan Soal — BAB 5</h4>
+        <p>Uji kemampuan perhitungan konsep mol</p>
+      </div>
+    </div>
+    <div class="quiz-body">
+
+      <div class="quiz-item" data-correct="b" id="q5_1">
+        <div class="quiz-q"><span class="q-num">1</span>Berapa mol 44 gram CO₂? (Mr CO₂ = 44)</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_1')"><span class="opt-letter">A</span>0,5 mol</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_1')"><span class="opt-letter">B</span>1 mol</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_1')"><span class="opt-letter">C</span>2 mol</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_1')"><span class="opt-letter">D</span>44 mol</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q5_1', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q5_1_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="c" id="q5_2">
+        <div class="quiz-q"><span class="q-num">2</span>Volume 3 mol gas ideal pada STP (22,4 L/mol) adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_2')"><span class="opt-letter">A</span>22,4 L</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_2')"><span class="opt-letter">B</span>44,8 L</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_2')"><span class="opt-letter">C</span>67,2 L</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_2')"><span class="opt-letter">D</span>33,6 L</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q5_2', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q5_2_fb"></div>
+      </div>
+
+      <div class="quiz-item" data-correct="a" id="q5_3">
+        <div class="quiz-q"><span class="q-num">3</span>Jumlah molekul dalam 2 mol H₂O adalah...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_3')"><span class="opt-letter">A</span>1,204 × 10²⁴</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_3')"><span class="opt-letter">B</span>6,022 × 10²³</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_3')"><span class="opt-letter">C</span>3,011 × 10²³</div>
+          <div class="quiz-opt" onclick="selectOpt(this,'q5_3')"><span class="opt-letter">D</span>12,044 × 10²³</div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkMC('q5_3', this)" disabled>Cek Jawaban</button>
+        <div class="quiz-feedback" id="q5_3_fb"></div>
+      </div>
+
+      <div class="quiz-item quiz-essay" id="q5_4">
+        <div class="quiz-q"><span class="q-num">4</span>Gas X memiliki massa 32 gram dengan Mr = 32. Pada STP, berapa volume gas tersebut? Tuliskan langkah perhitunganmu!</div>
+        <textarea placeholder="Hitung dulu molnya, kemudian kalikan dengan volume molar STP..."></textarea>
+        <button class="reveal-btn" onclick="revealEssay(this)">Lihat Pembahasan</button>
+        <div class="answer-reveal">
+          ✅ <strong>Pembahasan:</strong><br>
+          Langkah 1: n = m/Mr = 32/32 = <strong>1 mol</strong><br>
+          Langkah 2: V (STP) = n × 22,4 = 1 × 22,4 = <strong>22,4 L</strong><br>
+          Gas ini kemungkinan adalah O₂ (Mr = 32)!
+        </div>
+      </div>
+
+      <div id="score-bab5" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="chapter-complete">
+    <div class="cc-icon">🎉</div>
+    <h4>Selamat! Kamu telah menyelesaikan seluruh modul!</h4>
+    <p>Stoikiometri & Hukum Dasar Kimia — Kimia Kelas 10 Kurikulum Merdeka</p>
+  </div>
+
+</section>
+</div><!-- /wrap -->
+
+<footer>
+  <h3>Stoikiometri & Hukum Dasar Kimia</h3>
+  <p>Rangkuman Kimia Kelas 10 · Kurikulum Merdeka · SMA</p>
+  <p style="margin-top:12px;font-size:11px;color:var(--border2);">Mr · Tata Nama · Penyetaraan Reaksi · Lavoisier · Proust · Dalton · Gay-Lussac · Avogadro · Konsep Mol</p>
+</footer>
+
+<script>
+/* ─── PARTICLES ─── */
+const pc = document.getElementById('particles');
+for(let i=0;i<25;i++){
+  const p = document.createElement('div');
+  p.className='particle';
+  p.style.cssText=`left:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;animation-duration:${Math.random()*15+8}s;animation-delay:${Math.random()*8}s;opacity:${Math.random()*.5+.1};background:${Math.random()>.5?'var(--cyan)':'var(--lime)'}`;
+  pc.appendChild(p);
+}
+
+/* ─── SCROLL PROGRESS ─── */
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  const pct=(d.scrollTop)/(d.scrollHeight-d.clientHeight)*100;
+  document.getElementById('scrollProgress').style.width=pct+'%';
+
+  // active nav
+  document.querySelectorAll('.nav-link').forEach(a=>{
+    const target=document.querySelector(a.getAttribute('href'));
+    if(!target)return;
+    const rect=target.getBoundingClientRect();
+    if(rect.top<=100&&rect.bottom>100) a.classList.add('active');
+    else a.classList.remove('active');
+  });
+});
+
+/* ─── INTERSECTION OBSERVER (reveal on scroll) ─── */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:.08});
+document.querySelectorAll('.bab').forEach(b=>observer.observe(b));
+
+/* ─── ACCORDION ─── */
+function toggleAcc(btn){
+  const body=btn.nextElementSibling;
+  const open=btn.classList.toggle('open');
+  body.classList.toggle('open',open);
+}
+
+/* ─── QUIZ LOGIC ─── */
+const quizData = {
+  q1_1:{correct:'c',fb:{c:'✅ Benar! CO₂: (1×12)+(2×16)=12+32=44',w:'❌ Coba lagi. Hitung: C=12, O₂ artinya 2 atom O masing-masing 16.'}},
+  q1_2:{correct:'b',fb:{c:'✅ Tepat! C₆H₁₂O₆: (6×12)+(12×1)+(6×16)=72+12+96=180',w:'❌ Hitung lagi: 6 C, 12 H, 6 O. Mr=(6×12)+(12×1)+(6×16).'}},
+  q1_3:{correct:'d',fb:{c:'✅ Benar! Ca(OH)₂: O ada 2 karena angka 2 mengalikan isi kurung → Mr=40+32+2=74',w:'❌ Ingat: Ca(OH)₂ → angka 2 di luar kurung mengalikan semua atom di dalam kurung (O=2, H=2).'}},
+  q2_1:{correct:'b',fb:{c:'✅ Benar! FeCl₃ → Fe³⁺ (biloks +3) → Besi(III) Klorida (IUPAC)',w:'❌ Fero/Feri adalah nama lama. IUPAC menggunakan bilangan romawi: Besi(II)/Besi(III).'}},
+  q2_2:{correct:'c',fb:{c:'✅ Tepat! N₂O₄: N ada 2 → di-, O ada 4 → tetra- = Dinitrogen Tetraoksida',w:'❌ N ada 2 atom → awalan "di". O ada 4 atom → awalan "tetra".'}},
+  q2_3:{correct:'a',fb:{c:'✅ Benar! Al³⁺ (biloks+3) dan SO₄²⁻ (muatan-2) → KPK = 6 → Al₂(SO₄)₃',w:'❌ Muatan Al = +3, SO₄ = -2. Untuk netral: 2×(+3) + 3×(-2) = 0 → Al₂(SO₄)₃.'}},
+  q2_4:{correct:'d',fb:{c:'✅ Benar! SO₄²⁻ = ion sulfat (muatan -2)',w:'❌ SO₃²⁻ = sulfit. SO₄²⁻ = sulfat. Bedakan jumlah oksigennya!'}},
+  q3_1:{correct:'c',fb:{c:'✅ Benar! 4Al + 3O₂ → 2Al₂O₃. Cek: Al=4=4✓, O=6=6✓',w:'❌ Coba hitung ulang: Al₂O₃ butuh 2 Al dan 3 O. Setarakan Al dulu, baru O.'}},
+  q3_2:{correct:'b',fb:{c:'✅ Benar! 2H₂ + O₂ → 2H₂O. H=4=4✓, O=2=2✓',w:'❌ Cek: H₂ punya 2H, O₂ punya 2O, H₂O punya 2H dan 1O. Butuh 2H₂ dan 1O₂ untuk 2H₂O.'}},
+  q4_1:{correct:'b',fb:{c:'✅ Benar! Total massa awal=4+4=8g. Sisa S=2g. Massa SO₂=8-2=6g (Hukum Lavoisier)',w:'❌ Gunakan Hukum Lavoisier: total massa awal (8g) = massa produk + sisa. Sisa S = 2g, jadi SO₂ = 8-2 = 6g.'}},
+  q4_2:{correct:'c',fb:{c:'✅ Tepat! H:O = 1:8. Jika H=2g → O = 2×8 = 16g',w:'❌ Perbandingan H:O = 1:8. Jika H=2, maka O = 2×8 = 16 gram (bukan 8!).'}},
+  q4_3:{correct:'a',fb:{c:'✅ Benar! Koef N₂:NH₃ = 1:2. N₂=4L → NH₃ = (2/1)×4 = 8L',w:'❌ Hukum Gay-Lussac: koef N₂:NH₃ = 1:2. Jika N₂=4L, maka NH₃ = 4×(2/1) = 8L.'}},
+  q4_4:{correct:'d',fb:{c:'✅ Tepat! Itu inti dari Hukum Dalton: perbandingan massa = bilangan bulat sederhana',w:'❌ Hukum Dalton: jika massa satu unsur dibuat tetap, perbandingan massa unsur lainnya adalah bilangan bulat dan sederhana.'}},
+  q5_1:{correct:'b',fb:{c:'✅ Benar! n = m/Mr = 44/44 = 1 mol',w:'❌ n = m/Mr = 44 gram ÷ 44 g/mol = 1 mol.'}},
+  q5_2:{correct:'c',fb:{c:'✅ Tepat! V = n × 22,4 = 3 × 22,4 = 67,2 L',w:'❌ V = n × 22,4 L/mol = 3 × 22,4 = 67,2 L.'}},
+  q5_3:{correct:'a',fb:{c:'✅ Benar! JP = 2 × 6,022×10²³ = 1,204×10²⁴ molekul',w:'❌ JP = n × Nₐ = 2 × 6,022×10²³ = 1,204×10²⁴.'}},
+};
+
+const selections = {};
+const scores = {};
+
+function selectOpt(el, qid) {
+  const item = document.getElementById(qid);
+  if(item.classList.contains('revealed')) return;
+  item.querySelectorAll('.quiz-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selections[qid] = Array.from(item.querySelectorAll('.quiz-opt')).indexOf(el);
+  item.querySelector('.quiz-check-btn').disabled = false;
+}
+
+function checkMC(qid, btn) {
+  const item = document.getElementById(qid);
+  const data = quizData[qid];
+  if(!data) return;
+  const opts = item.querySelectorAll('.quiz-opt');
+  const letters = ['a','b','c','d'];
+  const selectedIdx = selections[qid];
+  const correctIdx = letters.indexOf(data.correct);
+  const fb = document.getElementById(qid+'_fb');
+
+  item.classList.add('revealed');
+  btn.disabled = true;
+
+  opts.forEach((o,i)=>{
+    if(i===correctIdx) o.classList.add('opt-correct');
+    else if(i===selectedIdx && i!==correctIdx) o.classList.add('opt-wrong');
+  });
+
+  const isCorrect = (selectedIdx===correctIdx);
+  fb.textContent = isCorrect ? data.fb.c : data.fb.w;
+  fb.className = 'quiz-feedback '+(isCorrect?'correct':'wrong');
+
+  item.classList.add(isCorrect?'correct':'wrong');
+
+  // track score
+  const babMatch = qid.match(/q(\d)_/);
+  if(babMatch) {
+    const b = 'bab'+babMatch[1];
+    if(!scores[b]) scores[b]={right:0,total:0};
+    scores[b].total++;
+    if(isCorrect) scores[b].right++;
+    updateScore(b);
+  }
+}
+
+function updateScore(bab) {
+  const all = document.querySelectorAll(`[id^="${bab.replace('bab','q')}"]`).length;
+  // count MC items only
+  const mcItems = document.querySelectorAll(`#quiz-${bab} .quiz-item:not(.quiz-essay)`);
+  const answeredAll = Array.from(mcItems).every(i=>i.classList.contains('revealed'));
+  if(!answeredAll) return;
+
+  const panel = document.getElementById('score-'+bab);
+  if(!panel) return;
+  const s = scores[bab] || {right:0,total:mcItems.length};
+  const pct = Math.round((s.right/s.total)*100);
+  const msg = pct===100?'Sempurna! 🏆':pct>=75?'Bagus sekali! 💪':pct>=50?'Terus berlatih! 📚':'Coba pelajari ulang! 🔄';
+
+  panel.style.display='block';
+  panel.innerHTML=`
+    <div class="quiz-score-panel" style="--pct:${pct}%">
+      <div class="score-circle"><div class="score-num">${pct}%</div></div>
+      <div class="score-info">
+        <h5>${s.right}/${s.total} soal benar</h5>
+        <p>${msg}</p>
+      </div>
+    </div>`;
+}
+
+function revealEssay(btn) {
+  const item = btn.closest('.quiz-item');
+  const reveal = item.querySelector('.answer-reveal');
+  reveal.style.display = 'block';
+  btn.textContent = '✓ Pembahasan Ditampilkan';
+  btn.disabled = true;
+  btn.style.opacity='.5';
+}
+</script>
+</body>
+</html>
